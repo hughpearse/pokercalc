@@ -1,0 +1,184 @@
+<html>
+<head>
+</head>
+<body onload="clearPot()">
+<h1>Investment Odds Calculator</h1>
+<form name="investoddscal">
+<p><label for="outs"># Of Estimated Outs: </label>
+<input type="text" name="outs" id="outs" size="10" value="" class="textfield" onchange="investOuts()"></p>
+<p><label for="round">Betting Round: </label><select name="round" id="round" class="selectfield" onchange="investOuts()">
+<option value="" selected="selected">- None -</option>
+<option value="turnriver">Turn & River</option>
+<option value="turn">Turn</option>
+<option value="river">River</option>
+</select></p>
+<p><label for="game">Game: </label><select name="game" id="game" class="selectfield" onchange="investOuts()">
+<option value="" selected="selected">- None -</option>
+<option value="holdem">Texas Holdem</option>
+<option value="pineapple">Pineapple</option>
+<option value="omaha">Omaha</option>
+</select></p>
+<p><label for="estpot">Estimated total pot size: </label>
+<input type="text" name="estpot" id="estpot" size="10" value="" class="textfield" onchange="myInvest()"></p>
+<p><label for="estcall">Your (est) total chip investment: </label>
+<input type="text" name="estcall" id="estcall" size="10" value="" class="textfield" onchange="myInvest()"></p>
+<p><input type="button" value="What are my odds for success?" onClick="myInvest()">
+<input type="button" value="Reset" onClick="clearPot()"></p>
+</form>
+<p><span id="empty"></span></p>
+<div id="outs_output">
+</div>
+<div id="invest_output">
+</div>
+<script>
+// math for outs and odds against based on hand
+function investmathOuts() {
+	// Outs
+	var outsField = Number(document.getElementsByTagName('input')[0].value);
+	var fortySeven = (outsField/47); // Holdem Turn
+	var fortySix = (outsField/46); // Holdem River / Pineapple Turn
+	var fortyFive = (outsField/45); // Pineapple River / Omaha Turn
+	var fortyFour = (outsField/44); // Omaha River
+	// Turn and River Outs
+	var holdemTR = (1 - (((47 - outsField)/47) * ((46 - outsField)/46)));
+	var pineappleTR = (1 - (((46 - outsField)/46) * ((45 - outsField)/45)));
+	var omahaTR = (1 - (((45 - outsField)/45) * ((44 - outsField)/44)));
+	// Round Selector
+	var roundSelect = document.getElementById('round'); 
+	var round = roundSelect.options[roundSelect.selectedIndex].value;
+	// Game Type
+	var gameSelect = document.getElementById('game'); 
+	var game = gameSelect.options[gameSelect.selectedIndex].value;	
+	// Check which round we are in and do the right math accordingly
+	switch(round) { 
+		case 'turnriver':
+			// Outs
+			var holdemLong = holdemTR;
+			var pineappleLong = pineappleTR;
+			var omahaLong = omahaTR;
+		break;
+		case 'turn':
+			// Outs
+			var holdemLong = fortySeven;
+			var pineappleLong = fortySix;
+			var omahaLong = fortyFive;
+		break;
+		case 'river':
+			// Outs
+			var holdemLong = fortySix;
+			var pineappleLong = fortyFive;
+			var omahaLong = fortyFour;
+		break;
+		default:
+			// Outs
+			var holdemLong = '';
+			var pineappleLong = '';
+			var omahaLong = '';
+	}
+	return [outsField, holdemLong, pineappleLong, omahaLong, game, round];
+}
+
+// prints outs on screen
+function investOuts() {
+	//rebuild variables from investmathOuts()
+	var f_investmathOuts = investmathOuts();
+	var outsField = f_investmathOuts[0];
+	var holdemLong = f_investmathOuts[1] * 100;
+	var pineappleLong = f_investmathOuts[2] * 100;
+	var omahaLong = f_investmathOuts[3] * 100;
+	var game = f_investmathOuts[4];
+	// Outs and Odds text for screen
+	if(typeof holdemLong == 'number' && outsField){
+		switch(game) { 
+			case 'holdem':
+				var outsText = '<p>Outs in Percent</p><p>Texas Holdem: ' + holdemLong.toFixed(2) + ' %</p>';
+			break;
+			case 'pineapple':
+				var outsText = '<p>Outs in Percent</p><p>Pineapple: ' + pineappleLong.toFixed(2) + ' %</p>';
+			break;
+			case 'omaha':
+				var outsText = '<p>Outs in Percent</p><p>Omaha: ' + omahaLong.toFixed(2) + ' %</p>';
+			break;
+			default:
+				var outsText ='';
+		}
+	}
+	else {
+		var outsText ='';
+	}
+	// prints out correct outs text
+	document.getElementById('outs_output').innerHTML = outsText;
+}
+
+// Investment odds related equations
+function myInvest() {
+	// call math odds
+	var f_investmathOuts = investmathOuts();
+	var outsField = f_investmathOuts[0];
+	var holdemLong = f_investmathOuts[1];
+	var pineappleLong = f_investmathOuts[2];
+	var omahaLong = f_investmathOuts[3];
+	var game = f_investmathOuts[4];
+	var round = f_investmathOuts[5];
+	var estpotField = Number(document.getElementsByTagName('input')[1].value);
+	var estcallField = Number(document.getElementsByTagName('input')[2].value);
+	var holdemInvest = (estpotField * holdemLong) / estcallField;
+	var pineappleInvest = (estpotField * pineappleLong) / estcallField;
+	var omahaInvest = (estpotField * omahaLong) / estcallField;
+	var correctPlay = 'If your estimates are right then this would be the correct play';
+	var badPlay = 'If your estimates are right then this would be a bad play';
+		
+	if(outsField && round && estpotField & estcallField) {
+		switch(game) { 
+				case 'holdem':
+					if(holdemInvest > 1) {
+						// prints out correct text
+						document.getElementById('invest_output').innerHTML = correctPlay;
+					}
+					else {
+						document.getElementById('invest_output').innerHTML = badPlay;					
+					}
+				break;
+				case 'pineapple':
+					if(pineappleInvest > 1)  {
+						// prints out correct text
+						document.getElementById('invest_output').innerHTML = correctPlay;
+					}
+					else {
+						document.getElementById('invest_output').innerHTML = badPlay;					
+					}
+				break;
+				case 'omaha':
+					if(omahaInvest > 1)  {
+						// prints out correct text
+						document.getElementById('invest_output').innerHTML = correctPlay;
+					}
+					else {
+						document.getElementById('invest_output').innerHTML = badPlay;					
+					}
+				break;
+				default:
+					document.getElementById('invest_output').innerHTML = '';
+		}
+	}
+	else {
+		document.getElementById('invest_output').innerHTML = '';
+	}
+}
+
+// reset button
+function clearPot() {
+	// clear text fields
+	document.getElementsByTagName('input')[0].value = '';
+	document.getElementsByTagName('input')[1].value = '';
+	document.getElementsByTagName('input')[2].value = ''; 
+	document.getElementById('round').selectedIndex = 0;
+	document.getElementById('game').selectedIndex = 0;
+	// clear outs
+	document.getElementById('outs_output').innerHTML = '';
+	// clear investment odds
+	document.getElementById('invest_output').innerHTML = '';
+}
+</script>
+</body>
+</html>

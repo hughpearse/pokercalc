@@ -1,0 +1,118 @@
+<html>
+<head>
+</head>
+<body onload="clearOuts()">
+<h1>Outs Calculator</h1>
+<form name="outscal">
+<p><label for="outs"># Of Estimated Outs: </label>
+<input type="text" name="outs" id="outs" size="10" value="" class="textfield" onchange="calOuts()"></p>
+<p><label for="round">Betting Round: </label><select name="round" id="round" class="selectfield" onchange="calOuts()">
+<option value="" selected="selected">- None -</option>
+<option value="turnriver">Turn & River</option>
+<option value="turn">Turn</option>
+<option value="river">River</option>
+</select></p>
+<p><input type="button" value="What are my odds for success?" class="success" onClick="calOuts()">
+<input type="button" value="Reset" onClick="clearOuts()"></p>
+</form>
+<p><span id="empty">Please select an option</span></p>
+<div id="outs_output">
+</div>
+<div id="oddsagainst_output">
+</div>
+<script>
+function calOuts() {
+	var outsField = Number(document.getElementsByTagName('input')[0].value);
+	// Outs
+	var fortySeven = (outsField/47) * 100; // Holdem Turn
+	var fortySix = (outsField/46) * 100; // Holdem River / Pineapple Turn
+	var fortyFive = (outsField/45) * 100; // Pineapple River / Omaha Turn
+	var fortyFour = (outsField/44) * 100; // Omaha River
+	// Turn and River Outs
+	var holdemTR = (1 - (((47 - outsField)/47) * ((46 - outsField)/46))) * 100;
+	var pineappleTR = (1 - (((46 - outsField)/46) * ((45 - outsField)/45))) * 100;
+	var omahaTR = (1 - (((45 - outsField)/45) * ((44 - outsField)/44))) * 100;
+	// Odds Against
+	var fortySevenAg = (47 - outsField) / outsField; // Holdem Turn
+	var fortySixAg = (46 - outsField) / outsField; // Holdem River / Pineapple Turn
+	var fortyFiveAg = (45 - outsField) / outsField; // Pineapple River / Omaha Turn
+	var fortyFourAg = (44 - outsField) / outsField; // Omaha River
+	// Round Selector
+	var roundSelect = document.getElementById('round'); 
+	var round = roundSelect.options[roundSelect.selectedIndex].value;
+	// Check which round we are in and do the right math accordingly
+	switch(round) { 
+		case 'turnriver':
+			// Outs
+			var holdemLong = holdemTR;
+			var pineappleLong = pineappleTR;
+			var omahaLong = omahaTR;
+			// Odds Against
+			var holdemOdds = (100 / holdemLong) - 1;
+			var pineappleOdds = (100 / pineappleLong) - 1;
+			var omahaOdds = (100 / omahaLong) - 1;
+		break;
+		case 'turn':
+			// Outs
+			var holdemLong = fortySeven;
+			var pineappleLong = fortySix;
+			var omahaLong = fortyFive;
+			// Odds Against
+			var holdemOdds = fortySevenAg;
+			var pineappleOdds = fortySixAg;
+			var omahaOdds = fortyFiveAg;
+		break;
+		case 'river':
+			// Outs
+			var holdemLong = fortySix;
+			var pineappleLong = fortyFive;
+			var omahaLong = fortyFour;
+			// Odds Against
+			var holdemOdds = fortySixAg;
+			var pineappleOdds = fortyFiveAg;
+			var omahaOdds = fortyFourAg;
+		break;
+		default:
+			// Outs
+			var holdemLong = '';
+			var pineappleLong = '';
+			var omahaLong = '';
+			// Odds Against
+			var holdemOdds = '';
+			var pineappleOdds = '';
+			var omahaOdds = '';
+	}
+	// Outs
+	if(typeof holdemLong == 'number' && outsField){
+		document.getElementById('empty').innerHTML = '';
+		var outsText = '<p>Outs in Percent</p><p>Texas Holdem: ' + holdemLong.toFixed(2) + ' %</p><p>Pineapple: ' + pineappleLong.toFixed(2) + ' %</p><p>Omaha: ' + omahaLong.toFixed(2) + ' %</p>';
+	}
+	else {
+		document.getElementById('empty').innerHTML = 'Please select an option';
+		var outsText ='';
+	}
+	// prints out correct outs text
+	document.getElementById('outs_output').innerHTML = outsText;
+	// Odds Against
+	if(typeof holdemOdds == 'number' && outsField){
+		var oddsText = '<p>Odds Against</p><p>Texas Holdem: ' + holdemOdds.toFixed(2) + ' to 1</p><p>Pineapple: ' + pineappleOdds.toFixed(2) + ' to 1</p><p>Omaha: ' + omahaOdds.toFixed(2) + ' to 1</p>';
+	}
+	else {
+		var oddsText ='';
+	}
+	// prints out correct odds against text
+	document.getElementById('oddsagainst_output').innerHTML = oddsText;
+}
+
+// reset all fields back to nothing
+function clearOuts() {
+	// clear fields
+	document.getElementsByTagName('input')[0].value = '';
+	document.getElementById('round').selectedIndex = 0;
+	// clear html
+	document.getElementById('outs_output').innerHTML = '';
+	document.getElementById('oddsagainst_output').innerHTML = '';
+}
+</script>
+</body>
+</html>
