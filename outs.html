@@ -4,24 +4,37 @@
 <body onload="clearOuts()">
 <h1>Outs Calculator</h1>
 <form name="outscal">
-<p><label for="outs"># Of Estimated Outs: </label>
-<input type="text" name="outs" id="outs" size="10" value="" class="textfield" onchange="calOuts()"></p>
-<p><label for="round">Betting Round: </label><select name="round" id="round" class="selectfield" onchange="calOuts()">
-<option value="" selected="selected">- None -</option>
-<option value="turnriver">Turn & River</option>
-<option value="turn">Turn</option>
-<option value="river">River</option>
-</select></p>
-<p><input type="button" value="What are my odds for success?" class="success" onClick="calOuts()">
-<input type="button" value="Reset" onClick="clearOuts()"></p>
+	<p>
+		<label for="outs"># Of Estimated Outs: </label>
+		<input type="text" name="outs" id="outs" size="10" value="" class="textfield" onchange="calOuts()">
+	</p>
+	<p>
+		<label for="round">Betting Round: </label>
+		<select name="round" id="round" class="selectfield" onchange="calOuts()">
+			<option value="" selected="selected">- None -</option>
+			<option value="turnriver">Turn & River</option>
+			<option value="turn">Turn</option>
+			<option value="river">River</option>
+		</select>
+	</p>
+	<p>
+		<input type="button" value="What are my odds for success?" class="success" onClick="calOuts()">
+		<input type="button" value="Reset" onClick="clearOuts()">
+	</p>
 </form>
-<p><span id="empty">Please select an option</span></p>
+<p>
+	<span id="empty">Please select an option</span>
+</p>
 <div id="outs_output">
 </div>
 <div id="oddsagainst_output">
 </div>
 <script>
 function calOuts() {
+	// Switch statement variables
+	var holdemLong, pineappleLong, omahaLong, holdemOdds, omahaOdds, pineappleOdds;
+	// Odds and Outs Text
+	var outsText, oddsText;
 	var outsField = Number(document.getElementsByTagName('input')[0].value);
 	// Outs
 	var fortySeven = (outsField/47) * 100; // Holdem Turn
@@ -44,61 +57,61 @@ function calOuts() {
 	switch(round) { 
 		case 'turnriver':
 			// Outs
-			var holdemLong = holdemTR;
-			var pineappleLong = pineappleTR;
-			var omahaLong = omahaTR;
+			holdemLong = holdemTR;
+			pineappleLong = pineappleTR;
+			omahaLong = omahaTR;
 			// Odds Against
-			var holdemOdds = (100 / holdemLong) - 1;
-			var pineappleOdds = (100 / pineappleLong) - 1;
-			var omahaOdds = (100 / omahaLong) - 1;
+			holdemOdds = (100 / holdemLong) - 1;
+			pineappleOdds = (100 / pineappleLong) - 1;
+			omahaOdds = (100 / omahaLong) - 1;
 		break;
 		case 'turn':
 			// Outs
-			var holdemLong = fortySeven;
-			var pineappleLong = fortySix;
-			var omahaLong = fortyFive;
+			holdemLong = fortySeven;
+			pineappleLong = fortySix;
+			omahaLong = fortyFive;
 			// Odds Against
-			var holdemOdds = fortySevenAg;
-			var pineappleOdds = fortySixAg;
-			var omahaOdds = fortyFiveAg;
+			holdemOdds = fortySevenAg;
+			pineappleOdds = fortySixAg;
+			omahaOdds = fortyFiveAg;
 		break;
 		case 'river':
 			// Outs
-			var holdemLong = fortySix;
-			var pineappleLong = fortyFive;
-			var omahaLong = fortyFour;
+			holdemLong = fortySix;
+			pineappleLong = fortyFive;
+			omahaLong = fortyFour;
 			// Odds Against
-			var holdemOdds = fortySixAg;
-			var pineappleOdds = fortyFiveAg;
-			var omahaOdds = fortyFourAg;
+			holdemOdds = fortySixAg;
+			pineappleOdds = fortyFiveAg;
+			omahaOdds = fortyFourAg;
 		break;
 		default:
 			// Outs
-			var holdemLong = '';
-			var pineappleLong = '';
-			var omahaLong = '';
+			holdemLong = '';
+			pineappleLong = '';
+			omahaLong = '';
 			// Odds Against
-			var holdemOdds = '';
-			var pineappleOdds = '';
-			var omahaOdds = '';
+			holdemOdds = '';
+			pineappleOdds = '';
+			omahaOdds = '';
 	}
 	// Outs
 	if(typeof holdemLong == 'number' && outsField){
 		document.getElementById('empty').innerHTML = '';
-		var outsText = '<p>Outs in Percent</p><p>Texas Holdem: ' + holdemLong.toFixed(2) + ' %</p><p>Pineapple: ' + pineappleLong.toFixed(2) + ' %</p><p>Omaha: ' + omahaLong.toFixed(2) + ' %</p>';
+		outsText = '<p>Outs in Percent</p><p>Texas Holdem: ' + holdemLong.toFixed(2) + ' %</p><p>Pineapple: ' + pineappleLong.toFixed(2) + ' %</p><p>Omaha: ' + omahaLong.toFixed(2) + ' %</p>';
 	}
 	else {
 		document.getElementById('empty').innerHTML = 'Please select an option';
-		var outsText ='';
+		outsText ='';
 	}
 	// prints out correct outs text
 	document.getElementById('outs_output').innerHTML = outsText;
 	// Odds Against
 	if(typeof holdemOdds == 'number' && outsField){
-		var oddsText = '<p>Odds Against</p><p>Texas Holdem: ' + holdemOdds.toFixed(2) + ' to 1</p><p>Pineapple: ' + pineappleOdds.toFixed(2) + ' to 1</p><p>Omaha: ' + omahaOdds.toFixed(2) + ' to 1</p>';
+		oddsText = '<p>Odds Against</p><p>Texas Holdem: ' + holdemOdds.toFixed(2) + ' to 1</p><p>Pineapple: ' + pineappleOdds.toFixed(2) + ' to 1</p><p>Omaha: ' + omahaOdds.toFixed(2) + ' to 1</p>';
 	}
 	else {
-		var oddsText ='';
+		oddsText ='';
 	}
 	// prints out correct odds against text
 	document.getElementById('oddsagainst_output').innerHTML = oddsText;

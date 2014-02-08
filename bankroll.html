@@ -2,23 +2,23 @@
 <head>
 <style>
 .update {
-border:1px solid #000;
-padding:5px;
-margin-right:10px;
+	border:1px solid #000;
+	padding:5px;
+	margin-right:10px;
 }
 
 .clear {
-border:1px solid #000;
-padding:5px;
+	border:1px solid #000;
+	padding:5px;
 }
 
 .update:hover, .clear:hover {
-cursor:pointer;
+	cursor:pointer;
 }
 
 .update:active, .clear:active {
-background:#000;
-color:#fff;
+	background:#000;
+	color:#fff;
 }
 </style>
 </head>
@@ -26,23 +26,62 @@ color:#fff;
 <h1>Bankroll Buy In Calculator</h1>
 <p>No information is stored anywhere. Values update automatically.</p>
 <form name="bankroll">
-<p><label for="income">Income: </label><input type="text" name="income" id="income" size="10" value="" onChange="myBankroll();" /></p>
-<p><label for="rent">Rent: </label><input type="text" name="rent" id="rent" size="10" value="" onChange="myBankroll();" /></p>
-<p><label for="food">Food: </label><input type="text" name="food" id="food" size="10" value="" onChange="myBankroll();" /></p>
-<p><label for="car">Car: </label><input type="text" name="car" id="car" size="10" value="" onChange="myBankroll();" /></p>
-<p><label for="insurance">Insurance: </label><input type="text" name="insurance" id="insurance" size="10" value="" onChange="myBankroll();" /></p>
-<p><label for="gas">Gas: </label><input type="text" name="gas" id="gas" size="10" value="" onChange="myBankroll();" /></p>
-<p><label for="utilities">Utilities: </label><input type="text" name="utilities" id="utilities" size="10" value="" onChange="myBankroll();" /></p>
-<p><label for="phone">Phone: </label><input type="text" name="phone" id="phone" size="10" value="" onChange="myBankroll();" /></p>
-<p><label for="cable">Cable: </label><input type="text" name="cable" id="cable" size="10" value="" onChange="myBankroll();" /></p>
-<p><label for="internet">Internet: </label><input type="text" name="internet" id="internet" size="10" value="" onChange="myBankroll();" /></p>
-<p><label for="netflix">Netflix: </label><input type="text" name="netflix" id="netflix" size="10" value="" onChange="myBankroll();" /></p>
-<p><label for="entertainment">Entertainment: </label><input type="text" name="entertainment" id="entertainment" size="10" value="" onChange="myBankroll();" /></p>
-<p><label for="misc">Other: </label><input type="text" name="misc" id="misc" size="10" value="" onChange="myBankroll();" /></p>
+	<p>
+		<label for="income">Income: </label>
+		<input type="text" name="income" id="income" size="10" value="" onChange="myBankroll();" />
+	</p>
+	<p>
+		<label for="rent">Rent: </label>
+		<input type="text" name="rent" id="rent" size="10" value="" onChange="myBankroll();" />
+	</p>
+	<p>
+		<label for="food">Food: </label>
+		<input type="text" name="food" id="food" size="10" value="" onChange="myBankroll();" />
+	</p>
+	<p>
+		<label for="car">Car: </label>
+		<input type="text" name="car" id="car" size="10" value="" onChange="myBankroll();" />
+	</p>
+	<p>
+		<label for="insurance">Insurance: </label>
+		<input type="text" name="insurance" id="insurance" size="10" value="" onChange="myBankroll();" />
+	</p>
+	<p>
+		<label for="gas">Gas: </label>
+		<input type="text" name="gas" id="gas" size="10" value="" onChange="myBankroll();" />
+	</p>
+	<p>
+		<label for="utilities">Utilities: </label>
+		<input type="text" name="utilities" id="utilities" size="10" value="" onChange="myBankroll();" />
+	</p>
+	<p>
+		<label for="phone">Phone: </label>
+		<input type="text" name="phone" id="phone" size="10" value="" onChange="myBankroll();" />
+	</p>
+	<p>
+		<label for="cable">Cable: </label>
+		<input type="text" name="cable" id="cable" size="10" value="" onChange="myBankroll();" />
+	</p>
+	<p>
+		<label for="internet">Internet: </label>
+		<input type="text" name="internet" id="internet" size="10" value="" onChange="myBankroll();" />
+	</p>
+	<p>
+		<label for="netflix">Netflix: </label>
+		<input type="text" name="netflix" id="netflix" size="10" value="" onChange="myBankroll();" />
+	</p>
+	<p>
+		<label for="entertainment">Entertainment: </label>
+		<input type="text" name="entertainment" id="entertainment" size="10" value="" onChange="myBankroll();" />
+	</p>
+	<p>
+		<label for="misc">Other: </label>
+		<input type="text" name="misc" id="misc" size="10" value="" onChange="myBankroll();" />
+	</p>
 </form>
 <p>
-<button type="button" class="update" onclick="myBankroll()">Update</button>
-<button type="button" class="clear" onclick="reset()">Clear Values</button>
+	<button type="button" class="update" onclick="myBankroll()">Update</button>
+	<button type="button" class="clear" onclick="reset()">Clear Values</button>
 </p>
 <div id="bankroll_output"></div>
 <script>
@@ -51,7 +90,7 @@ var inputs = document.getElementsByTagName('input');
 var income = Number(inputs[0].value);
 var expenses = 0;
 	// offset by 1 as income is our starting value and we dont want this added in
-	for(i=1; i < inputs.length; i++){
+	for(var i=1; i < inputs.length; i++){
 		expenses += Number(inputs[i].value);
 	}
 var disposable = income - expenses;
@@ -73,7 +112,7 @@ var tourneyText = '<p>Using the 1/50th rule of thumb you can buy in to a $' + to
 function reset() {
 var inputs = document.getElementsByTagName('input');
 // clean out all values from fields
-for(i=0; i < inputs.length; i++){
+for(var i=0; i < inputs.length; i++){
 		inputs[i].value = '';
 	}
 // remove display text

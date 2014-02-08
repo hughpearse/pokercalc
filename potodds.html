@@ -4,27 +4,43 @@
 <body onload="clearPot()">
 <h1>Pot Odds Calculator</h1>
 <form name="potoddscal">
-<p><label for="outs"># Of Estimated Outs: </label>
-<input type="text" name="outs" id="outs" size="10" value="" class="textfield" onchange="myOuts()"></p>
-<p><label for="round">Betting Round: </label><select name="round" id="round" class="selectfield" onchange="myOuts()">
-<option value="" selected="selected">- None -</option>
-<option value="turn">Turn</option>
-<option value="river">River</option>
-</select></p>
-<p><label for="game">Game: </label><select name="game" id="game" class="selectfield" onchange="myOuts()">
-<option value="" selected="selected">- None -</option>
-<option value="holdem">Texas Holdem</option>
-<option value="pineapple">Pineapple</option>
-<option value="omaha">Omaha</option>
-</select></p>
-<p><label for="pot">Money in pot: </label>
-<input type="text" name="pot" id="pot" size="10" value="" class="textfield" onchange="myPot()"></p>
-<p><label for="call">Cost to call: </label>
-<input type="text" name="call" id="call" size="10" value="" class="textfield" onchange="myPot()"></p>
-<p><input type="button" value="What are my odds for success?" onClick="myPot()">
-<input type="button" value="Reset" onClick="clearPot()"></p>
+	<p>
+		<label for="outs"># Of Estimated Outs: </label>
+		<input type="text" name="outs" id="outs" size="10" value="" class="textfield" onchange="myOuts()">
+	</p>
+	<p>
+		<label for="round">Betting Round: </label>
+		<select name="round" id="round" class="selectfield" onchange="myOuts()">
+			<option value="" selected="selected">- None -</option>
+			<option value="turn">Turn</option>
+			<option value="river">River</option>
+		</select>
+	</p>
+	<p>
+		<label for="game">Game: </label>
+		<select name="game" id="game" class="selectfield" onchange="myOuts()">
+			<option value="" selected="selected">- None -</option>
+			<option value="holdem">Texas Holdem</option>
+			<option value="pineapple">Pineapple</option>
+			<option value="omaha">Omaha</option>
+		</select>
+	</p>
+	<p>
+		<label for="pot">Money in pot: </label>
+		<input type="text" name="pot" id="pot" size="10" value="" class="textfield" onchange="myPot()">
+	</p>
+	<p>
+		<label for="call">Cost to call: </label>
+		<input type="text" name="call" id="call" size="10" value="" class="textfield" onchange="myPot()">
+	</p>
+	<p>
+		<input type="button" value="What are my odds for success?" onClick="myPot()">
+		<input type="button" value="Reset" onClick="clearPot()">
+	</p>
 </form>
-<p><span id="empty"></span></p>
+<p>
+	<span id="empty"></span>
+</p>
 <div id="outs_output">
 </div>
 <div id="oddsagainst_output">
@@ -38,6 +54,8 @@
 <script>
 // math for outs and odds against based on hand
 function mathOuts() {
+	// switch statement variables
+	var holdemLong, pineappleLong, omahaLong, holdemOdds, pineappleOdds, omahaOdds;
 	// Outs
 	var outsField = Number(document.getElementsByTagName('input')[0].value);
 	var fortySeven = (outsField/47) * 100; // Holdem Turn
@@ -59,39 +77,41 @@ function mathOuts() {
 	switch(round) { 
 		case 'turn':
 			// Outs
-			var holdemLong = fortySeven;
-			var pineappleLong = fortySix;
-			var omahaLong = fortyFive;
+			holdemLong = fortySeven;
+			pineappleLong = fortySix;
+			omahaLong = fortyFive;
 			// Odds Against
-			var holdemOdds = fortySevenAg;
-			var pineappleOdds = fortySixAg;
-			var omahaOdds = fortyFiveAg;
+			holdemOdds = fortySevenAg;
+			pineappleOdds = fortySixAg;
+			omahaOdds = fortyFiveAg;
 		break;
 		case 'river':
 			// Outs
-			var holdemLong = fortySix;
-			var pineappleLong = fortyFive;
-			var omahaLong = fortyFour;
+			holdemLong = fortySix;
+			pineappleLong = fortyFive;
+			omahaLong = fortyFour;
 			// Odds Against
-			var holdemOdds = fortySixAg;
-			var pineappleOdds = fortyFiveAg;
-			var omahaOdds = fortyFourAg;
+			holdemOdds = fortySixAg;
+			pineappleOdds = fortyFiveAg;
+			omahaOdds = fortyFourAg;
 		break;
 		default:
 			// Outs
-			var holdemLong = '';
-			var pineappleLong = '';
-			var omahaLong = '';
+			holdemLong = '';
+			pineappleLong = '';
+			omahaLong = '';
 			// Odds Against
-			var holdemOdds = '';
-			var pineappleOdds = '';
-			var omahaOdds = '';
+			holdemOdds = '';
+			pineappleOdds = '';
+			omahaOdds = '';
 	}
 	return [outsField, holdemLong, pineappleLong, omahaLong, holdemOdds, pineappleOdds, omahaOdds, game, round];
 }
 
 // prints outs on screen
 function myOuts() {
+	// odds and outs text variables in switch statement
+	var outsText, oddsText;
 	//rebuild variables from mathOuts()
 	var f_mathOuts = mathOuts();
 	var outsField = f_mathOuts[0];
@@ -106,25 +126,25 @@ function myOuts() {
 	if(typeof holdemLong == 'number' && outsField){
 		switch(game) { 
 			case 'holdem':
-				var outsText = '<p>Outs in Percent</p><p>Texas Holdem: ' + holdemLong.toFixed(2) + ' %</p>';
-				var oddsText ='<p>Odds Against</p><p>Texas Holdem: ' + holdemOdds.toFixed(2) + ' to 1</p>';
+				outsText = '<p>Outs in Percent</p><p>Texas Holdem: ' + holdemLong.toFixed(2) + ' %</p>';
+				oddsText ='<p>Odds Against</p><p>Texas Holdem: ' + holdemOdds.toFixed(2) + ' to 1</p>';
 			break;
 			case 'pineapple':
-				var outsText = '<p>Outs in Percent</p><p>Pineapple: ' + pineappleLong.toFixed(2) + ' %</p>';
-				var oddsText ='<p>Odds Against</p><p>Pineapple: ' + pineappleOdds.toFixed(2) + ' to 1</p>';
+				outsText = '<p>Outs in Percent</p><p>Pineapple: ' + pineappleLong.toFixed(2) + ' %</p>';
+				oddsText ='<p>Odds Against</p><p>Pineapple: ' + pineappleOdds.toFixed(2) + ' to 1</p>';
 			break;
 			case 'omaha':
-				var outsText = '<p>Outs in Percent</p><p>Omaha: ' + omahaLong.toFixed(2) + ' %</p>';
-				var oddsText ='<p>Odds Against</p><p>Omaha: ' + omahaOdds.toFixed(2) + ' to 1</p>';
+				outsText = '<p>Outs in Percent</p><p>Omaha: ' + omahaLong.toFixed(2) + ' %</p>';
+				oddsText ='<p>Odds Against</p><p>Omaha: ' + omahaOdds.toFixed(2) + ' to 1</p>';
 			break;
 			default:
-				var outsText ='';
-				var oddsText ='';
+				outsText ='';
+				oddsText ='';
 		}
 	}
 	else {
-		var outsText ='';
-		var oddsText ='';
+		outsText ='';
+		oddsText ='';
 	}
 	// prints out correct outs text
 	document.getElementById('outs_output').innerHTML = outsText;
@@ -205,6 +225,8 @@ function goodCall() {
 
 // prints the pot odds on screen
 function myPot() {
+	// text variables in if else
+	var percentText, oddsText;
 	// grabbing values from mathPot()
 	var f_mathPot = mathPot();
 	var potField = f_mathPot[0];
@@ -214,13 +236,13 @@ function myPot() {
 	// this is for printing out values on screen
 	goodCall();
 	if(potField && callField){
-	document.getElementById('empty').innerHTML = '';
-	var percentText = '<p>Pot Odds in Percent</p><p>' + percentCall.toFixed(2) + ' %</p>';
-	var oddsText = '<p>Odds Against Pot Odds</p><p>' + oddsCall.toFixed(2) + ' to 1</p>';
+		document.getElementById('empty').innerHTML = '';
+		percentText = '<p>Pot Odds in Percent</p><p>' + percentCall.toFixed(2) + ' %</p>';
+		oddsText = '<p>Odds Against Pot Odds</p><p>' + oddsCall.toFixed(2) + ' to 1</p>';
 	}
 	else {
-	var percentText ='';
-	var oddsText ='';
+		percentText ='';
+		oddsText ='';
 	}
 	// prints out correct outs text
 	document.getElementById('percent_output').innerHTML = percentText;

@@ -2,37 +2,55 @@
 <head>
 </head>
 <body onload="clearPot()">
-<h1>Investment Odds Calculator</h1>
-<form name="investoddscal">
-<p><label for="outs"># Of Estimated Outs: </label>
-<input type="text" name="outs" id="outs" size="10" value="" class="textfield" onchange="investOuts()"></p>
-<p><label for="round">Betting Round: </label><select name="round" id="round" class="selectfield" onchange="investOuts()">
-<option value="" selected="selected">- None -</option>
-<option value="turnriver">Turn & River</option>
-<option value="turn">Turn</option>
-<option value="river">River</option>
-</select></p>
-<p><label for="game">Game: </label><select name="game" id="game" class="selectfield" onchange="investOuts()">
-<option value="" selected="selected">- None -</option>
-<option value="holdem">Texas Holdem</option>
-<option value="pineapple">Pineapple</option>
-<option value="omaha">Omaha</option>
-</select></p>
-<p><label for="estpot">Estimated total pot size: </label>
-<input type="text" name="estpot" id="estpot" size="10" value="" class="textfield" onchange="myInvest()"></p>
-<p><label for="estcall">Your (est) total chip investment: </label>
-<input type="text" name="estcall" id="estcall" size="10" value="" class="textfield" onchange="myInvest()"></p>
-<p><input type="button" value="What are my odds for success?" onClick="myInvest()">
-<input type="button" value="Reset" onClick="clearPot()"></p>
-</form>
-<p><span id="empty"></span></p>
-<div id="outs_output">
-</div>
-<div id="invest_output">
-</div>
+	<h1>Investment Odds Calculator</h1>
+	<form name="investoddscal">
+		<p>
+		<label for="outs"># Of Estimated Outs: </label>
+		<input type="text" name="outs" id="outs" size="10" value="" class="textfield" onchange="investOuts()">
+		</p>
+		<p>
+			<label for="round">Betting Round: </label>
+			<select name="round" id="round" class="selectfield" onchange="investOuts()">
+				<option value="" selected="selected">- None -</option>
+				<option value="turnriver">Turn & River</option>
+				<option value="turn">Turn</option>
+				<option value="river">River</option>
+			</select>
+		</p>
+		<p>
+			<label for="game">Game: </label>
+			<select name="game" id="game" class="selectfield" onchange="investOuts()">
+				<option value="" selected="selected">- None -</option>
+				<option value="holdem">Texas Holdem</option>
+				<option value="pineapple">Pineapple</option>
+				<option value="omaha">Omaha</option>
+			</select>
+		</p>
+		<p>
+			<label for="estpot">Estimated total pot size: </label>
+			<input type="text" name="estpot" id="estpot" size="10" value="" class="textfield" onchange="myInvest()">
+		</p>
+		<p>
+			<label for="estcall">Your (est) total chip investment: </label>
+			<input type="text" name="estcall" id="estcall" size="10" value="" class="textfield" onchange="myInvest()">
+		</p>
+		<p>
+			<input type="button" value="What are my odds for success?" onClick="myInvest()">
+			<input type="button" value="Reset" onClick="clearPot()">
+		</p>
+	</form>
+	<p>
+		<span id="empty"></span>
+	</p>
+	<div id="outs_output">
+	</div>
+	<div id="invest_output">
+	</div>
 <script>
 // math for outs and odds against based on hand
 function investmathOuts() {
+	// switch case variables
+	var holdemLong, pineappleLong, OmahaLong;
 	// Outs
 	var outsField = Number(document.getElementsByTagName('input')[0].value);
 	var fortySeven = (outsField/47); // Holdem Turn
@@ -53,27 +71,27 @@ function investmathOuts() {
 	switch(round) { 
 		case 'turnriver':
 			// Outs
-			var holdemLong = holdemTR;
-			var pineappleLong = pineappleTR;
-			var omahaLong = omahaTR;
+			holdemLong = holdemTR;
+			pineappleLong = pineappleTR;
+			omahaLong = omahaTR;
 		break;
 		case 'turn':
 			// Outs
-			var holdemLong = fortySeven;
-			var pineappleLong = fortySix;
-			var omahaLong = fortyFive;
+			holdemLong = fortySeven;
+			pineappleLong = fortySix;
+			omahaLong = fortyFive;
 		break;
 		case 'river':
 			// Outs
-			var holdemLong = fortySix;
-			var pineappleLong = fortyFive;
-			var omahaLong = fortyFour;
+			holdemLong = fortySix;
+			pineappleLong = fortyFive;
+			omahaLong = fortyFour;
 		break;
 		default:
 			// Outs
-			var holdemLong = '';
-			var pineappleLong = '';
-			var omahaLong = '';
+			holdemLong = '';
+			pineappleLong = '';
+			omahaLong = '';
 	}
 	return [outsField, holdemLong, pineappleLong, omahaLong, game, round];
 }
@@ -87,24 +105,26 @@ function investOuts() {
 	var pineappleLong = f_investmathOuts[2] * 100;
 	var omahaLong = f_investmathOuts[3] * 100;
 	var game = f_investmathOuts[4];
+	// Initialize variables for text
+	var outsText;
 	// Outs and Odds text for screen
 	if(typeof holdemLong == 'number' && outsField){
 		switch(game) { 
 			case 'holdem':
-				var outsText = '<p>Outs in Percent</p><p>Texas Holdem: ' + holdemLong.toFixed(2) + ' %</p>';
+				outsText = '<p>Outs in Percent</p><p>Texas Holdem: ' + holdemLong.toFixed(2) + ' %</p>';
 			break;
 			case 'pineapple':
-				var outsText = '<p>Outs in Percent</p><p>Pineapple: ' + pineappleLong.toFixed(2) + ' %</p>';
+				outsText = '<p>Outs in Percent</p><p>Pineapple: ' + pineappleLong.toFixed(2) + ' %</p>';
 			break;
 			case 'omaha':
-				var outsText = '<p>Outs in Percent</p><p>Omaha: ' + omahaLong.toFixed(2) + ' %</p>';
+				outsText = '<p>Outs in Percent</p><p>Omaha: ' + omahaLong.toFixed(2) + ' %</p>';
 			break;
 			default:
-				var outsText ='';
+				outsText ='';
 		}
 	}
 	else {
-		var outsText ='';
+		outsText ='';
 	}
 	// prints out correct outs text
 	document.getElementById('outs_output').innerHTML = outsText;

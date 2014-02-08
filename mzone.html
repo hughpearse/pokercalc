@@ -2,46 +2,58 @@
 <head>
 <style>
 #zone_square {
-height:100px;
-width:100px;
+	height:100px;
+	width:100px;
 }
 .green {
-background:green;
-color:white;
+	background:green;
+	color:white;
 }
 .yellow {
-background:yellow;
-color:black;
+	background:yellow;
+	color:black;
 }
 .orange {
-background:orange;
-color:black;
+	background:orange;
+	color:black;
 }
 .red {
-background:red;
-color:white;
+	background:red;
+	color:white;
 }
 .dead {
-background:black;
-color:white;
+	background:black;
+	color:white;
 }
 </style>
 </head>
 <body onload="clearM()">
 <h1>M-Zone Calculator</h1>
 <form name="mzonecal">
-<p><label for="stack">Your current chip count: </label>
-<input type="text" name="stack" id="stack" size="10" value="" class="textfield" onchange="mZone()"></p>
-<p><label for="bblind">Big Blind: </label>
-<input type="text" name="bblind" id="bblind" size="10" value="" class="textfield" onchange="mZone()"></p>
-<p><label for="sblind">Small Blind: </label>
-<input type="text" name="sblind" id="sblind" size="10" value="" class="textfield" onchange="mZone()"></p>
-<p><label for="players"># of players at table: </label>
-<input type="text" name="players" id="players" size="10" value="" class="textfield" onchange="mZone()"></p>
-<p><label for="antes">Ante: </label>
-<input type="text" name="antes" id="antes" size="10" value="" class="textfield" onchange="mZone()"></p>
-<p><input type="button" value="Whats my zone?" class="success" onClick="mZone()">
-<input type="button" value="Reset" onClick="clearM()"></p>
+	<p>
+		<label for="stack">Your current chip count: </label>
+		<input type="text" name="stack" id="stack" size="10" value="" class="textfield" onchange="mZone()">
+	</p>
+	<p>
+		<label for="bblind">Big Blind: </label>
+		<input type="text" name="bblind" id="bblind" size="10" value="" class="textfield" onchange="mZone()">
+	</p>
+	<p>
+		<label for="sblind">Small Blind: </label>
+		<input type="text" name="sblind" id="sblind" size="10" value="" class="textfield" onchange="mZone()">
+	</p>
+	<p>
+		<label for="players"># of players at table: </label>
+		<input type="text" name="players" id="players" size="10" value="" class="textfield" onchange="mZone()">
+	</p>
+	<p>
+		<label for="antes">Ante: </label>
+		<input type="text" name="antes" id="antes" size="10" value="" class="textfield" onchange="mZone()">
+	</p>
+	<p>
+		<input type="button" value="Whats my zone?" class="success" onClick="mZone()">
+		<input type="button" value="Reset" onClick="clearM()">
+	</p>
 </form>
 <div id="zone_output">
 </div>
@@ -63,23 +75,23 @@ function mZone() {
 	if(chipCount && bigBlind && smallBlind) {
 		switch(true){
 			case zone >= 20:
-				document.getElementById('zone_output').innerHTML = zoneText + 'Green Zone';
+				document.getElementById('zone_output').innerHTML = zoneText + 'Green Zone at ' + zone;
 				document.getElementById('zone_square').className = 'green';
 			break;
 			case zone < 20 && zone >= 10:
-				document.getElementById('zone_output').innerHTML = zoneText + 'Yellow Zone';
+				document.getElementById('zone_output').innerHTML = zoneText + 'Yellow Zone at ' + zone;
 				document.getElementById('zone_square').className = 'yellow';
 			break;
 			case zone < 10 && zone >= 6:
-				document.getElementById('zone_output').innerHTML = zoneText + 'Orange Zone';
+				document.getElementById('zone_output').innerHTML = zoneText + 'Orange Zone at ' + zone;
 				document.getElementById('zone_square').className = 'orange';
 			break;
 			case zone < 6 && zone > 1:
-				document.getElementById('zone_output').innerHTML = zoneText + 'Red Zone';
+				document.getElementById('zone_output').innerHTML = zoneText + 'Red Zone at ' + zone;
 				document.getElementById('zone_square').className = 'red';
 			break;
 			case zone <= 1:
-				document.getElementById('zone_output').innerHTML = zoneText + 'Dead Zone';
+				document.getElementById('zone_output').innerHTML = zoneText + 'Dead Zone at ' + zone;
 				document.getElementById('zone_square').className = 'dead';
 			break;
 			default:
