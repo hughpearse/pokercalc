@@ -1,0 +1,34 @@
+﻿<html>
+<head>
+</head>
+<body>
+<h1>Outs Calculator</h1>
+<form name="outscal">
+	<p>
+		<label for="outs"># Of Estimated Outs: </label>
+		<input type="text" name="outs" id="outs" size="10" value="" class="textfield">
+	</p>
+	<p>
+		<label for="round">Betting Round: </label>
+		<select name="round" id="round" class="selectfield">
+			<option value="" selected="selected">- None -</option>
+			<option value="turnriver">Turn & River</option>
+			<option value="turn">Turn</option>
+			<option value="river">River</option>
+		</select>
+	</p>
+	<p>
+		<input type="button" value="What are my odds for success?" class="success" id="submit">
+		<input type="button" value="Reset" id="reset">
+	</p>
+</form>
+<p>
+	<span id="empty">Please select an option</span>
+</p>
+<div id="outs_output">
+</div>
+<div id="oddsagainst_output">
+</div>
+<script src="odds.js"></script>
+</body>
+</html>
